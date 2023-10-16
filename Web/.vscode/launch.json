@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ThuVienApplication<thu_vien>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.thu_vien.ThuVienApplication",
+            "projectName": "thu_vien",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

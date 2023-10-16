@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Update</title>
+    </head>
+    <body>
+        <form th:action="@{/admin/save}" th:object="${truyen}" method="post">
+            <input type="hidden" th:field="*{id}">
+            <br>
+            Ten:<input type="text" th:field="*{ten}" placeholder="Ten">
+            <br>
+            Tac gia:<input type="text" th:field="*{tacgia}" placeholder="Tac gia">
+            <br>
+            Trang thai:
+            <br>
+            <input type="radio" th:field="*{tinh_trang}" value="Đang cập nhật" name="trangthai">Đang cập nhật
+            <br>
+            <input type="radio" th:field="*{tinh_trang}" value = "Hoàn thành" name="trangthai">Hoàn thành
+            <br>
+            <p>
+                <label>The loai:
+                    <input type="checkbox" name="the_loais"
+                        th:each="t : ${theloai}"
+                        th:text="${t.ten}"
+                        th:value="${t.id}"
+                        th:field="*{the_loais}"
+                    />
+                </label>
+            </p>
+            <p>So chap:<span th:text="${listchap}"></span></p>
+            <div th:object="${chapmoi}">
+                <input type="hidden" th:field="*{id}">
+                Chap:
+                <input type="text" th:field="*{id_chap}">
+                File Path:
+                <input type="text" th:field="*{filePath}">
+            </div>
+            <button type="submit">Save</button>
+        </form>
+    </body>
+</html>
