@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Thư viện</title>
+        <style type="text/css">
+            ol {
+                list-style-type: none;
+            }
+            ol > li > ol {
+                display: none;
+            }
+            li:hover ol{
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <img src="#">
+            <form th:action="@{/search}" method="get">
+                <input type="search" placeholder="Tìm truyện" name="ten">
+                <button type="submit">Tim</button>
+            </form>
+        </div>
+        <div>
+            <ol >
+                <li>
+                    <a th:href="@{/}">Trang chủ</a>
+                </li>
+                <li>
+                    <p>Thể loại</p>
+                    <ol th:each="s:${theloai}">
+                        <li>
+                            <a th:href="@{/theloai/{id}(id=${s.id})}" th:utext="${s.ten}"></a>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <p>Xếp hạng</p>
+                    <ol>
+                        <li>
+                            <a th:href="@{/sapxep/luot_xem}">Lượt xem</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/sapxep/luot_thich}">Lượt thích</a>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+        <ol th:each="t:${test}">
+            <li th:utext="${t.id_chap}"></li>
+        </ol>
+    </body>
+</html>
