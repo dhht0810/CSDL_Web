@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title th:utext="${truyen.ten}"></title>
+        <style type="text/css">
+            ol {
+                list-style-type: none;
+            }
+            ol > li > ol {
+                display: none;
+            }
+            li:hover ol{
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <img src="#">
+            <form th:action="@{/search}" method="get">
+                <input type="search" placeholder="Tìm truyện" name="ten">
+                <button type="submit">Tim</button>
+            </form>
+        </div>
+        <div>
+            <ol >
+                <li>
+                    <a th:href="@{/}">Trang chủ</a>
+                </li>
+                <li>
+                    <p>Thể loại</p>
+                    <ol th:each="s:${theloai}">
+                        <li>
+                            <a th:href="@{/theloai/{id}(id=${s.id})}" th:utext="${s.ten}"></a>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <p>Xếp hạng</p>
+                    <ol>
+                        <li>
+                            <a th:href="@{/sapxep/luot_xem}">Lượt xem</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/sapxep/luot_thich}">Lượt thích</a>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        <img th:src="@{{truyen}(truyen=${truyen.chaps[0].filePath})}" style="width: 192.5px; height: 250px;">
+                    </td>
+                    <td>
+                        <h3 th:utext="${truyen.ten}"></h3>
+                        <p>Tac gia: <span th:utext="${truyen.tacgia}"></span></p>
+                        <p>Trang thai: <span th:utext="${truyen.tinh_trang}"></span></p>
+                        <p>The loai: 
+                            <span th:each="th:${truyen.the_loais}">
+                                <a th:utext="${th.ten}" th:href="@{/theloai/{id}(id=${th.id})}"></a>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <div th:each="a:${truyen.chaps}">
+                <a th:if="${a.id_chap} > 0" th:utext="${a.ten}" th:href="@{/truyen/{id}/chap{c}(id=${a.id_truyen}, c=${a.id_chap})}"></a>          
+            </div>
+        </div>
+    </body>
+</html>

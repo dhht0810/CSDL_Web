@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Admin</title>
+    </head>
+    <body>
+        <a th:href="@{/admin/add}">Them truyen moi</a>
+        <table border="1">
+            <tr>
+                <td>Id</td>
+                <td>Ten</td>
+                <td>Tac gia</td>
+                <td>trang thai</td>
+                <td colspan="2">Action</td>
+            </tr>
+            <tr th:each="a:${truyen}">
+                <td th:utext="${a.id}"></td>
+                <td th:utext="${a.ten}"></td>
+                <td th:utext="${a.tacgia}"></td>
+                <td th:utext="${a.tinh_trang}"></td>
+                <td>
+                    <a th:href="@{/admin/update/truyen/{id}(id=${a.id})}">Cap nhat</a>
+                </td>
+                <td>
+                    <a th:href="@{/admin/delete/truyen/{id}(id=${a.id})}">Xoa</a>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
