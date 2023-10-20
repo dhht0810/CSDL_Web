@@ -18,40 +18,39 @@
                 display: block;
             }
         </style>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <div class="sidebar">
         <div>
-            <img src="#">
+            <img src="..\icon\book.png">
             <form th:action="@{/search}" method="get">
                 <input type="search" placeholder="Tìm truyện" name="ten">
                 <button type="submit">Tim</button>
             </form>
         </div>
         <div>
-            <ol >
-                <li>
+                <div class="trangchu">
                     <a th:href="@{/}">Trang chủ</a>
-                </li>
-                <li>
+                </div>
+                <div class="theloai">
                     <p>Thể loại</p>
                     <ol th:each="s:${theloai}">
                         <li>
                             <a th:href="@{/theloai/{id}(id=${s.id})}" th:utext="${s.ten}"></a>
                         </li>
                     </ol>
-                </li>
-                <li>
+                </div>
+                <nav class="xephang">
                     <p>Xếp hạng</p>
-                    <ol>
-                        <li>
+                    <div class="luotxem">
                             <a th:href="@{/sapxep/luot_xem}">Lượt xem</a>
-                        </li>
-                        <li>
+                    </div>
+                    <div class="luotthich">
                             <a th:href="@{/sapxep/luot_thich}">Lượt thích</a>
-                        </li>
-                    </ol>
-                </li>
-            </ol>
+                        </div>
+                </nav>
+        </div>
         </div>
     </body>
 </html>
