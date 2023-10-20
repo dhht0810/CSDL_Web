@@ -3,6 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <title>Thư viện</title>
+        
+        <link rel="stylesheet" href="style.css">
         <style type="text/css">
             input[type=text] {
                 border: none;
@@ -20,38 +22,37 @@
         </style>
     </head>
     <body>
-        <div>
-            <img src="#">
+        <div class = "sidebar"> 
+            <img src="res\book.png">
+            <div class="searchbar"></div> 
             <form th:action="@{/search}" method="get">
                 <input type="search" placeholder="Tìm truyện" name="ten">
-                <button type="submit">Tim</button>
+                <button type="submit"> Tim</button>
             </form>
+            </div>
         </div>
-        <div>
-            <ol >
-                <li>
+        <div class="name">
+                <div class="trangchu">
                     <a th:href="@{/}">Trang chủ</a>
-                </li>
-                <li>
+                </div>
+                <div class="theloai">
                     <p>Thể loại</p>
                     <ol th:each="s:${theloai}">
                         <li>
                             <a th:href="@{/theloai/{id}(id=${s.id})}" th:utext="${s.ten}"></a>
                         </li>
                     </ol>
-                </li>
-                <li>
+                </div>
+                <nav class ="xephang">
                     <p>Xếp hạng</p>
-                    <ol>
-                        <li>
+                        <div class="luotxem">
                             <a th:href="@{/sapxep/luot_xem}">Lượt xem</a>
-                        </li>
-                        <li>
+                        </div>
+                        <div class="luotthich">
                             <a th:href="@{/sapxep/luot_thich}">Lượt thích</a>
-                        </li>
-                    </ol>
-                </li>
-            </ol>
+                    </div>
+                </nav>
+        </div>
         </div>
     </body>
 </html>
