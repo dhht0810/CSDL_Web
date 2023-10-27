@@ -4,10 +4,6 @@
         <meta charset="UTF-8">
         <title>Thư viện</title>
         <style type="text/css">
-            input[type=text] {
-                border: none;
-                border-bottom: 2px solid red;
-                }
             ol {
                 list-style-type: none;
             }
@@ -18,18 +14,17 @@
                 display: block;
             }
         </style>
-        <link rel="stylesheet" href="style.css">
+         <link rel="stylesheet" th:href="@{/css/style.css}"/>
     </head>
     <body>
         <div class="sidebar">
         <div>
-            <img src="..\icon\book.png">
+            <img th:src="@{/icon/book.png}"/>
             <form th:action="@{/search}" method="get">
                 <input type="search" placeholder="Tìm truyện" name="ten">
                 <button type="submit">Tim</button>
             </form>
         </div>
-        <div>
                 <div class="trangchu">
                     <a th:href="@{/}">Trang chủ</a>
                 </div>
