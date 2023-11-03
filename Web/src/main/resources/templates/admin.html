@@ -3,8 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <title>Admin</title>
+        <link rel="stylesheet" href="../static/css/global.css" th:href="@{/css/global.css}"/>
     </head>
     <body>
+        <div class="wrap">
         <a th:href="@{/admin/add}">Them truyen moi</a>
         <table border="1">
             <tr>
@@ -27,5 +29,6 @@
                 </td>
             </tr>
         </table>
+        </div>
     </body>
 </html>

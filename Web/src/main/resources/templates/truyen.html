@@ -14,8 +14,10 @@
                 display: block;
             }
         </style>
+        <link rel="stylesheet" href="../static/css/global.css" th:href="@{/css/global.css}"/>
     </head>
     <body>
+        <div class="wrap">
         <div>
             <img src="#">
             <form th:action="@{/search}" method="get">
@@ -70,6 +72,7 @@
             <div th:each="a:${truyen.chaps}">
                 <a th:if="${a.id_chap} > 0" th:utext="'Chap ' + ${a.id_chap}" th:href="@{/truyen/{id}/chap{c}(id=${truyen.id}, c=${a.id_chap})}"></a>          
             </div>
+        </div>
         </div>
     </body>
 </html>

@@ -3,8 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <title>Update</title>
+        <link rel="stylesheet" href="../static/css/global.css" th:href="@{/css/global.css}"/>
     </head>
     <body>
+        <div class="wrap">
         <form th:action="@{/admin/save}" th:object="${truyen}" method="post">
             <input type="hidden" th:field="*{id}">
             <br>
@@ -38,5 +40,6 @@
             </div>
             <button type="submit">Save</button>
         </form>
+        </div>
     </body>
 </html>

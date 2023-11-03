@@ -14,8 +14,10 @@
                 display: block;
             }
         </style>
+        <link rel="stylesheet" href="../static/css/global.css" th:href="@{/css/global.css}"/>
     </head>
     <body>
+        <div class="wrap">
         <div>
             <img src="#">
             <form th:action="@{/search}" method="get">
@@ -52,5 +54,6 @@
         <ol th:each="t:${test}">
             <li th:utext="${t.id_chap}"></li>
         </ol>
+        </div>
     </body>
 </html>

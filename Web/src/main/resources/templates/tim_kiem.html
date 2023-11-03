@@ -14,8 +14,10 @@
                 display: block;
             }
         </style>
+        <link rel="stylesheet" href="../static/css/global.css" th:href="@{/css/global.css}"/>
     </head>
     <body>
+        <div class="wrap">
         <div>
             <img src="#">
             <form th:action="@{/search}" method="get">
@@ -55,6 +57,7 @@
                 <p th:utext="${truyen.ten}"></p>
                 <p th:utext="${truyen.tacgia}"></p>
             </a>
+        </div>
         </div>
     </body>
 </html>

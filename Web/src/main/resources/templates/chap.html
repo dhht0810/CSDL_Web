@@ -14,9 +14,11 @@
                 display: block;
             }
         </style>
-        <link rel="stylesheet" th:href="@{/css/style.css}"/>
+        <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}"/>
+        <link rel="stylesheet" href="../static/css/global.css" th:href="@{/css/global.css}"/>
     </head>
     <body>
+        <div class="wrap">
         <nav class="sidebar">
         <div>
             <img th:src="@{/icon/book.png}"/>
@@ -70,6 +72,9 @@
         </div>
         </form>
         </div>
-            <img th:src="@{{file}(file=${chaphientai.filePath})}" style="width:60%">
+        <div class="chappanel">
+            <img th:src="@{{file}(file=${chaphientai.filePath})}">
+        </div>
+        </div>
     </body>
 </html>
