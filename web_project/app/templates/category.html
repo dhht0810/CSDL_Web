@@ -1,0 +1,58 @@
+{% extends "master.html" %}
+
+{% block title %}
+    {{category.0.name}}
+{% endblock %}
+
+{% block content %}
+    {% load static %}
+    <div class="card border-primary mb-3">
+        <div class="card-body">
+            <h2>{{category.0.name}}</h2>
+            <p>{{category.0.content}}</p>
+        </div>
+    </div>
+    <div class="container">
+    <div class="row">
+    <div class="col-lg-12 card mb-3" style="width: 82%;">
+      <div class="card-body">
+          <div class="card border-primary mb-3">
+            <div class="card-body">
+              <div class="row">
+            {% for x in story %}
+            <a href="/story/{{x.id}}" style="color:black; text-decoration:none;">
+            <div class="col-sm">
+            <div class="row" style="max-width: 25%;">
+                  <div class="col">
+                    <img src="{% get_media_prefix %}{{x.image}}" class="card-img">
+                  </div>
+                  <div class="col">
+                      <h5 >{{x.name}}</h5>
+                      <p >Tac gia: {{x.authors}}</p>
+                      <p >{% for i in list_category %}
+                        <span><a href="/category/{{i.id}}" style="color:black; text-decoration:none;">{{i.name}} </a></span>
+                        {% endfor %}</p>
+                  </div>
+              </div>
+            </div>
+          </a>
+            {% endfor %}
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+    <div class="col-lg-2 card border-0 mb-3 ms-10">
+      <div class="card-body">
+        <h5>The loai</h5>
+        <div class="row" style="max-width: 500px;">
+          {% for x in list_category %}
+            <div class="col">
+              <a href="/category/{{x.id}}" style="color:black; text-decoration:none;">{{x.name}}</a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+  </div>
+</div>
+{% endblock  %}
