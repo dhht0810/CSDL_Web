@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+  <div class="container">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <a class="navbar-brand mt-2 mt-lg-0" href="/">
+        <img
+          src="https://classroomclipart.com/image/static7/preview2/one-open-book-with-plant-design-elements-55799.jpg"
+          height="30"
+          alt="Logo"
+          loading="lazy"
+        />
+      </a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Trang chu</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Danh sach</a>
+          <ul class="dropdown-menu">
+            {% for x in category %}
+            <li><a class="dropdown-item" href="#">{{x.name}}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">The loai</a>
+          <ul class="dropdown-menu">
+            {% for x in category %}
+              <li><a class="dropdown-item" href="/category/{{x.id}}">{{x.name}}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+      <form class="d-flex input-group w-auto" method="GET" action="{% url 'search' %}">
+        {% csrf_token %}
+        <input type="search" class="form-control" placeholder="Tim truyen" aria-label="Search" name="search_story"/>
+        <button class="btn btn-outline-light" type="submit" data-ripple-color="dark">Search</button>
+      </form>
+  </div>
+</nav>
