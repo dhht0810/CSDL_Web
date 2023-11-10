@@ -1,3 +1,4 @@
+import os
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
@@ -40,4 +41,10 @@ def chapter(request, story_id, id):
     chapter = chapters.objects.raw("select * from app_chapters where story_id = %s and id = %s",[story_id, id])
     chaptertruoc= chapters.objects.raw("select * from app_chapters where story_id = %s and id = %s",[story_id, id-1])
     chaptersau = chapters.objects.raw("select * from app_chapters where story_id = %s and id = %s",[story_id, id+1])
-    return render(request, 'chapter.html', {'chapter': chapter, 'chaptertruoc': chaptertruoc, 'chaptersau': chaptersau, 'story': myStory, 'list_chapter': myChapter})
+    file = chapter[0].file.open('r')
+    data = ""
+    for x in file:
+        data += x
+    file.close()
+    return render(request, 'chapter.html', {'chapter': chapter, 'chaptertruoc': chaptertruoc, 'chaptersau': chaptersau, 
+                                            'story': myStory, 'list_chapter': myChapter, 'data': data})
