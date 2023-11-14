@@ -1,0 +1,37 @@
+{% extends "users/master.html" %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+<div class="container border-2px">
+<form method="POST" action="" novalidate>
+    {% csrf_token %}
+                  <div class="mb-3">
+                      <label for="Username">Username<span class="text-danger">*</span></label>
+                      <input type="text" name="username" class="form-control" id="Username" placeholder="Enter Username">
+                      {% if form.username.errors %}
+                      <strong style="color:red;">{{ form.username.errors }}</strong>
+                      {% endif %}
+                  </div>
+      
+                  <div class="mb-3">
+                      <label for="Password">Password<span class="text-danger">*</span></label>
+                      <input type="password" name="password1" class="form-control" placeholder="Enter Password">
+                      {% if form.password1.errors %}
+                      <strong style="color:red;">{{ form.password1.errors }}</strong>
+                      {% endif %}
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="Password">Enter the password again<span class="text-danger">*</span></label>
+                    <input type="password" name="password2" class="form-control" placeholder="Enter Password Again">
+                    {% if form.password2.errors %}
+                        <strong style="color:red;">{{ form.password1.errors }}</strong>
+                    {% endif %}
+                  </div>
+                  <button type="submit" class="btn btn-primary mx-auto w-100" id="submitButton">Sign up</button>
+                  
+</form> 
+</div>
+{% endblock %}
+          
