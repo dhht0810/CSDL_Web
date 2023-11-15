@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.db.models import fields  
 from django import forms  
 from .models import CustomUser  
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import get_user_model
   
 User = get_user_model()  
   

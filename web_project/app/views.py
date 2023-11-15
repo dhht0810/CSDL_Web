@@ -57,7 +57,7 @@ def chapter(request, story_id, chapter_id):
         
         
     file = chapter[0].file.open('r')
-
     return render(request, 'app/chapter.html', {'chapter': chapter, 'chaptertruoc': chaptertruoc, 'chaptersau': chaptersau, 
                                             'story': myStory, 'list_chapter': myChapter, 'data': file.read(), 'list_comment': myComment,
                                             })
+    

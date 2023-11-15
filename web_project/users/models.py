@@ -21,6 +21,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return f"{self.username}"
     
     def has_perm(self, perm, obj=None):  
-        "Does the user have a specific permission?"  
-        # Simplest possible answer: Yes, always  
-        return True 
+        if self.is_active and self.is_superuser:
+            return True
+        return super().has_perm(perm, obj)
