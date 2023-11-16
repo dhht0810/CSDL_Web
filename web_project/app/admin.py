@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django import forms
 from .models import *
 
 # Register your models here.
@@ -22,3 +21,4 @@ class StoryAdmin(admin.ModelAdmin):
 admin.site.register(story, StoryAdmin)
 admin.site.register(author)
 admin.site.register(category)
+admin.site.register(comment)
