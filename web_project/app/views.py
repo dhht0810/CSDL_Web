@@ -42,5 +42,9 @@ def chapter(request, story_id, id):
     chaptertruoc= chapters.objects.raw("select * from app_chapters where story_id = %s and id = %s",[story_id, id-1])
     chaptersau = chapters.objects.raw("select * from app_chapters where story_id = %s and id = %s",[story_id, id+1])
     file = chapter[0].file.open('r')
-    return render(request, 'chapter.html', {'chapter': chapter, 'chaptertruoc': chaptertruoc, 'chaptersau': chaptersau, 
-                                            'story': myStory, 'list_chapter': myChapter, 'data': file.read()})
+    file_path = chapter[0].file.path
+    with open(file_path, 'r', encoding='utf-8') as file:
+     file_content = file.read()
+
+     return render(request, 'chapter.html', {'chapter': chapter, 'chaptertruoc': chaptertruoc, 'chaptersau': chaptersau, 
+                                        'story': myStory, 'list_chapter': myChapter, 'data': file_content})
