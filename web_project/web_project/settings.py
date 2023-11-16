@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mptt',
     'bootstrap5',
     'app',
     'users',
@@ -83,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'web',
         'USER': 'root',
-        'PASSWORD': 'tungbu11',
+        'PASSWORD': '@abxDLH38',
         'HOST': 'localhost',
         'PORT': '3306',
     }
