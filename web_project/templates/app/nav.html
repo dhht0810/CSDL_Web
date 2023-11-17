@@ -42,13 +42,14 @@
           {{user.username}}
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#notifications">Thong bao</button></li>
           <li><a class="dropdown-item" href="#">Lich su</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
           <li><a class="dropdown-item" href={% url 'logout' %}>Log out</a></li>
           {% if user.is_staff %}
             <li><a class="dropdown-item" href="/admin/">Edit user</a></li>
           {% endif %}
         </ul>
+        
       </div>
       {% else %}
       <a href="/login/" class="btn btn-primary mx-2">
@@ -59,99 +60,38 @@
   </div>
 </nav>
 
-      <!-- Modal Form -->
-      <div class="modal fade" id="DangNhap" tabindex="-1" aria-hidden="true" >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-              <!-- Login Form -->
-              <form method="POST" action="" novalidate>
-                {% csrf_token %}
-                <div class="modal-header">
-                  <h5 class="modal-title">Dang nhap</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <div class="mb-3">
-                      <label for="Username">Username<span class="text-danger">*</span></label>
-                      <input type="text" name="username" class="form-control" placeholder="Enter Username">
-                  </div>
-      
-                  <div class="mb-3">
-                      <label for="Password">Password<span class="text-danger">*</span></label>
-                      <input type="password" name="password" class="form-control" placeholder="Enter Password">
-                  </div>
-                </div>
-                <div class="modal-footer pt-4">                  
-                  <button type="submit" class="btn btn-primary mx-auto w-100">Login</button>
-                </div>
-                <p class="text-center">Not yet account, <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#DangKy">Signup</button></p> 
-            </form>
-          </div>
-        </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="notifications" tabindex="-1" aria-labelledby="notificationsLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary" style="height:50px;">
+        <p class="mb-2 mx-auto text-white" id="notificationsLabel" style="font-size:20px;">Thong bao</p>
       </div>
-
-      
-      <div class="modal fade" id="DangKy" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-              <form method="POST" action="" novalidate>
-                {% csrf_token %}
-                <div class="modal-header">
-                  <h5 class="modal-title">Dang ky</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <script> let error = false;</script>
-                  <div class="mb-3">
-                      <label for="Username">Username<span class="text-danger">*</span></label>
-                      <input type="text" name="username" class="form-control" id="Username" placeholder="Enter Username">
-                      {% if form.username.errors %}
-                        {{ form.username.errors }}
-                        <script> error = true; </script>
-                      {% endif %}
-                  </div>
-      
-                  <div class="mb-3">
-                      <label for="Password">Password<span class="text-danger">*</span></label>
-                      <input type="password" name="password1" class="form-control" placeholder="Enter Password">
-                      {% if form.password1.errors %}
-                        {{ form.password1.errors }}
-                        <script> 
-                          error = true; 
-                          let usernameError = "{{ form.password1.errors.0 }}";
-                        </script>
-                      {% endif %}
-                      <div id="es"></div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="Password">Enter the password again<span class="text-danger">*</span></label>
-                    <input type="password" name="password2" class="form-control" placeholder="Enter Password Again">
-                    {% if form.password2.errors %}
-                      <script> error = true; </script>
-                    {% endif %}
-                  </div>
-                </div>
-                <div class="modal-footer pt-4">  
-                  <button type="button" class="btn btn-primary mx-auto w-100" id="submitButton">Sign up</button>
-                  <script>
-                      
-                        document.getElementById('submitButton').addEventListener('click', function() {
-                          if(!error) {
-                            alert("success");
-                            document.getElementById('DangKy').submit();
-                          
-                          } else {
-                              alert("Dang ky ko thanh cong");
-                              document.getElementById('es').innerHTML="{{ form.password1.errors.0 }}";
-                          }
-                        });
-                    
-                  </script>
-                </div>
-            </form>
-          </div>
-        </div>
+      <div class="modal-body">
+        <ul>
+        {% for notification in notifications %} 
+        <li>
+          {% if not notification.read %} 
+            <div class="notification"> 
+              <form method="POST" action="">
+                <input type="hidden" name="hidden" value="{{notification.story.id}}"/>
+                <button type="submit">
+                  <a href="{{ notification.chapter.get_absolute_url }}"> 
+                    Chương "{{ notification.chapter.name }}" của truyện "{{ notification.chapter.story.name }}" đã được cập nhật. 
+                  </a> 
+                </button>
+              </form>
+            </div> 
+            {% endif %} 
+          </li>
+        {% endfor %}
+          </ul>
       </div>
-
-      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
