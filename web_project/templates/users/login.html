@@ -9,12 +9,22 @@
           <div class="mb-3">
               <label for="Username">Username<span class="text-danger">*</span></label>
               <input type="text" name="username" class="form-control" placeholder="Enter Username">
+              {% if form.username.errors %}
+                  {% for error in form.username.errors %}
+                  <strong style="color:red;">{{ error }}</strong>
+                  {% endfor %}
+              {% endif %}
           </div>
 
           <div class="mb-3">
               <label for="Password">Password<span class="text-danger">*</span></label>
               <input type="password" name="password" class="form-control" placeholder="Enter Password">
-          </div>              
+              {% if form.password.errors %}
+                  {% for error in form.password.errors %}
+                  <strong style="color:red;">{{ error }}</strong>
+                  {% endfor %}
+              {% endif %}
+          </div>    
           <button type="submit" class="btn btn-primary mx-auto w-100">Login</button>
         
           <hr />

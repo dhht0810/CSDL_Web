@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from app.models import comment
+from django.contrib.auth.forms import AuthenticationForm
 
 # Create your views here.
 
@@ -18,14 +18,20 @@ def login(request):
     if request.user.is_authenticated:
         return redirect("/")
     if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            auth_login(request,user)
-            return redirect("/")
-    return render(request, "users/login.html", {})
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                auth_login(request, user)
+                return redirect("/")
+    else:
+        form = AuthenticationForm()
+    return render(request, "users/login.html", {"form": form})
         
 def logout(request):
     auth_logout(request)
     return redirect("/")
+
+

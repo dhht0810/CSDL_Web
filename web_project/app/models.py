@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
+from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
 class author(models.Model):
@@ -38,7 +39,8 @@ class story(models.Model):
 def remove_file(**kwargs):
     instance = kwargs.get('instance')
     instance.file.delete(save=False)
-    
+
+   
 class chapters(models.Model):
     name = models.CharField(default="", max_length= 50)
     date =  models.DateField(auto_now_add=True)
@@ -53,12 +55,29 @@ def remove_file(**kwargs):
     instance = kwargs.get('instance')
     instance.file.delete(save=False)
     
-class comment(models.Model):
-    comments = models.CharField(default='', max_length=255,null=True,blank=True)
+    
+class UserStory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    story = models.ForeignKey(story, on_delete=models.CASCADE)
+    read = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
-    reply = models.ForeignKey('self',on_delete=models.CASCADE,null=True)
+
+@receiver(post_save, sender=chapters)
+def send_update_notification(sender, instance, created, **kwargs):
+    if created:
+        user_stories = UserStory.objects.filter(story=instance.story)
+        for user_story in user_stories:
+            user_story.read = False
+            user_story.save()
+    
+class comment(MPTTModel):
+    content = models.CharField(default='', max_length=255,null=True,blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     chapters = models.ForeignKey(chapters,blank=True,on_delete=models.CASCADE)
     
     def __str__(self):
-        return f"{self.comments} {self.date}"
+        return f"{self.content} {self.date}"
+    class MPTTMeta:
+        order_insertion_by = ['content']
