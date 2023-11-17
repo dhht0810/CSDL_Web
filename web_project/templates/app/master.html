@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% include "app/nav.html" %}
+    </head>
+    <body class="container">
+      <br /><br /><br />
+      {% block content %}
+      {% endblock %}
+    </body>
+</html> 
