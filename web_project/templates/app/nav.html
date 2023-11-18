@@ -76,10 +76,10 @@
           {% if not notification.read %} 
             <div class="notification"> 
               <form method="POST" action="">
-                <input type="hidden" name="hidden" value="{{notification.story.id}}"/>
+                <input type="hidden" name="hidden" value="{{notification.id}}"/>
                 <button type="submit">
-                  <a href="{{ notification.chapter.get_absolute_url }}"> 
-                    Chương "{{ notification.chapter.name }}" của truyện "{{ notification.chapter.story.name }}" đã được cập nhật. 
+                  <a href="{{ notification.story.get_absolute_url }}"> 
+                    Truyện "{{ notification.story.name }}" đã được cập nhật. 
                   </a> 
                 </button>
               </form>

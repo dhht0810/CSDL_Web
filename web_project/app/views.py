@@ -9,15 +9,17 @@ def home(request):
 def list_category(request):
     mydata = category.objects.raw("select * from app_category")
     myStatus = story.objects.raw("select distinct(status) from app_story")
-    user_stories = UserStory.objects.filter(user=request.user).order_by('-date')
-    if request.method == "POST":
-        story_id = request.POST.get("hidden")
-        notification = get_object_or_404(UserStory, id=int(story_id))
-        if request.user == notification.user:
-            notification.read = True
-            notification.save()
-        return redirect("/story/" + str(story_id))
-    return {"category":mydata, "status": myStatus,"notifications": user_stories,}
+    if request.user.is_authenticated:
+        user_stories = UserStory.objects.filter(user=request.user).order_by('-date')
+        if request.method == "POST":
+            story_id = request.POST.get("hidden")
+            notification = get_object_or_404(UserStory, id=int(story_id))
+            if request.user == notification.user:
+                notification.read = True
+                notification.save()
+            return redirect("/story/" + str(story_id))
+        return {"category":mydata, "status": myStatus,'notifications':user_stories,}
+    return {"category":mydata, "status": myStatus,}
 
 def search(request):
     search_story = request.GET['search_story']
@@ -71,7 +73,7 @@ def chapter(request, story_id, chapter_id):
             addReply.save()
         return redirect("/story/" + str(story_id) + "/chapter/" + str(chapter_id))
             
-    myComment = comment.objects.all()
+    myComment = comment.objects.filter(chapters=chapter_id)
         
     file = chapter[0].file.open('r')
     return render(request, 'app/chapter.html', {'chapter': chapter, 'chaptertruoc': chaptertruoc, 'chaptersau': chaptersau, 
