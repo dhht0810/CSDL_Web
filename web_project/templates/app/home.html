@@ -1,0 +1,11 @@
+{% extends "app/master.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+    {% for x in story %}
+        <h1>{{ x.name }}</h1>
+    {% endfor %}
+{% endblock %}
