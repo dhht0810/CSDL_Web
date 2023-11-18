@@ -24,21 +24,21 @@
                     </p>
                     <a href="/story/{{story.0.id}}/chapter/{{chapters.0.id}}" class="btn btn-primary mx-auto d-md-flex">Doc tu dau</a>
                     {% if user.is_authenticated %}
-                        {% if is_following %}
-                            <form class="d-flex input-group w-auto" method="POST" action="">
-                                {% csrf_token %}
-                                <input type="hidden" name="unfollow"/>
-                                <button class="btn btn-primary mx-2 mt-2" type="submit" data-ripple-color="dark">Hủy theo dõi</button>
-                            </form>
-                        {% else %}
-                            <form class="d-flex input-group w-auto" method="POST" action="">
-                                {% csrf_token %}
-                                <input type="hidden" name="follow"/>
-                                <button class="btn btn-primary mx-2 mt-2" type="submit" data-ripple-color="dark">Theo dõi</button>
-                            </form>
-                        {% endif %}
-                    {% endif %}
-                </div>
+    {% if is_following %}
+        <form class="d-flex input-group w-auto" method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" name="unfollow"/>
+            <button class="btn btn-primary mx-2 mt-2" type="submit" data-ripple-color="dark">Hủy theo dõi</button>
+        </form>
+    {% else %}
+        <form class="d-flex input-group w-auto" method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" name="follow"/>
+            <button class="btn btn-primary mx-2 mt-2" type="submit" data-ripple-color="dark">Theo dõi</button>
+        </form>
+    {% endif %}
+{% endif %}
+                    </div>
             </div>
             <br />
             <h6>Noi dung</h6>
