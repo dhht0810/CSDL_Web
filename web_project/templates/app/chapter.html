@@ -1,0 +1,146 @@
+{% extends "app/master.html" %}
+
+{% block title %}
+    {{story.0.name}}
+{% endblock %}
+
+{% block content %}
+{% load static %}
+{% load mptt_tags %}
+<div class="card border-primary mb-3">
+    <div class="card-body">
+        <p><a href="/" style="color:black; text-decoration:none;">Trang chu</a>
+             / <a href="/story/{{story.0.id}}" style="color:black; text-decoration:none;">{{story.0.name}}</a>
+             / <a href="/story/{{story.0.id}}/chapter/{{chapter.0.id}}" style="color:black; text-decoration:none;">{{chapter.0.name}}</a></p>
+        <h5>{{story.0.name}} / {{chapter.0.name}}</h5>
+        <div class="container row justify-content-md-center">
+            <button type="button" class="btn btn-primary" style="width:110px;">
+                {% if chaptertruoc.0.id == null %}
+                    Chap truoc
+                {% else %}
+                    <a href="/story/{{story.0.id}}/chapter/{{chaptertruoc.0.id}}" class="btn-primary" style="text-decoration:none;">Chap truoc</a>
+                {% endif %}
+            </button>
+            <select class="form-select mx-2 border-primary" aria-label="Default select example" style="width:110px;" onchange="location = this.value;">
+                {% for x in list_chapter %}
+                    {% if x.id == chapter.0.id %}
+                        <option value="{% url 'chapter' x.story_id x.id %}" selected>{{x.name}}</a></option>
+                    {% else %}
+                        <option value="{% url 'chapter' x.story_id x.id %}">{{x.name}}</a></option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <button type="button" class="btn btn-primary" style="width:110px;">
+                {% if chaptersau.0.id == null %}
+                    Chap sau
+                {% else %}
+                    <a href="/story/{{story.0.id}}/chapter/{{chaptersau.0.id}}" class="btn-primary" style="text-decoration:none;">Chap sau</a>
+                {% endif %}
+            </button>
+        </div>
+        <hr />
+        {{data|linebreaks}}
+        <hr />
+        <div class="container row justify-content-md-center">
+            <button type="button" class="btn btn-primary" style="width:110px;">
+                {% if chaptertruoc.0.id == null %}
+                    Chap truoc
+                {% else %}
+                    <a href="/story/{{story.0.id}}/chapter/{{chaptertruoc.0.id}}" class="btn-primary" style="text-decoration:none;">Chap truoc</a>
+                {% endif %}
+            </button>
+            <select class="form-select mx-2 border-primary" aria-label="Default select example" style="width:110px;" onchange="location = this.value;">
+                {% for x in list_chapter %}
+                    {% if x.id == chapter.0.id %}
+                        <option value="{% url 'chapter' x.story_id x.id %}" selected>{{x.name}}</a></option>
+                    {% else %}
+                        <option value="{% url 'chapter' x.story_id x.id %}">{{x.name}}</a></option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <button type="button" class="btn btn-primary" style="width:110px;">
+                {% if chaptersau.0.id == null %}
+                    Chap sau
+                {% else %}
+                    <a href="/story/{{story.0.id}}/chapter/{{chaptersau.0.id}}" class="btn-primary" style="text-decoration:none;">Chap sau</a>
+                {% endif %}
+            </button>
+        </div>
+        <br />
+        <br />
+        <h5>Binh luan</h5>
+        {% if user.is_authenticated %}
+            
+      <form class="d-flex input-group w-auto" method="POST" onsubmit action="">
+        {% csrf_token %}
+        <input type="text" class="form-control" placeholder="Binh luan" name="comment"/>
+        <button class="btn btn-primary mx-2" type="submit" data-ripple-color="dark" id="comments">Send</button>
+      </form>
+        {% else %}
+            Hay <a href="/login/">Dang nhap</a> de binh luan va nhan thong bao moi nhat truyen ban quan tam.
+        {% endif %}
+
+        <ul class="root" style="list-style-type:none">
+            {% recursetree list_comment %}
+                <li>
+                    <div class="card border-primary mt-3">
+                        <div class="card-body">
+                            <i style="color:blue;">{{node.user}} - <span style="font-size:12px; color:black;">{{node.date}}</span></i>
+                            <br />
+                            {{node.content}}
+                            {% if user.is_superuser or user == node.user %}
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <form class="d-flex input-group w-auto" method="POST" action="">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="delete" value="{{node.id}}"/>
+                                    <button class="btn btn-danger btn-sm mt-2" type="submit" data-ripple-color="dark">Delete</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-2 mb-2 btn-sm" onclick="toggleReplyTo({{node.id}})">phan hoi</button>
+                    {% if user.is_authenticated %}
+                    <button class="btn btn-primary mt-2 mb-2 btn-sm" onclick="toggleReplyForm({{node.id}})">Trả lời</button>
+                    {% endif %}
+                    <div id="replyForm{{node.id}}" style="display: none;">
+                        <form class="d-flex input-group w-auto" method="POST" action="" onsubmit>
+                            {% csrf_token %}
+                            <input type="hidden" name="hidden" value="{{node.id}}"/>
+                            <input type="text" class="form-control" placeholder="Trả lời" name="reply"/>
+                            <button class="btn btn-primary mx-2" type="submit" data-ripple-color="dark">Gửi</button>
+                        </form>
+                    </div>
+                    <div id="replyTo{{node.id}}" style="display: none;">
+                        {% if not node.is_leaf_node %}
+                        <ul class="children" style="list-style-type:none">
+                            {{children}}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endrecursetree %}
+        </ul>
+        
+        <script>
+            function toggleReplyForm(commentId) {
+                let element = document.getElementById('replyForm' + commentId);
+                if (element.style.display === 'none') {
+                    element.style.display = 'block';
+                } else {
+                    element.style.display = 'none';
+                }
+            }
+        
+            function toggleReplyTo(commentId) {
+                let element = document.getElementById('replyTo' + commentId);
+                if (element.style.display === 'none') {
+                    element.style.display = 'block';
+                } else {
+                    element.style.display = 'none';
+                }
+            }
+        </script>
+    </div>
+</div>
+{% endblock  %}

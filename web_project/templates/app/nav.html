@@ -1,0 +1,97 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+  <div class="container">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <a class="navbar-brand mt-2 mt-lg-0" href="/">
+        <img
+          src="https://classroomclipart.com/image/static7/preview2/one-open-book-with-plant-design-elements-55799.jpg"
+          height="30"
+          alt="Logo"
+          loading="lazy"
+        />
+      </a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Trang chu</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Danh sach</a>
+          <ul class="dropdown-menu">
+            {% for x in category %}
+            <li><a class="dropdown-item" href="#">{{x.name}}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">The loai</a>
+          <ul class="dropdown-menu">
+            {% for x in category %}
+              <li><a class="dropdown-item" href="/category/{{x.id}}">{{x.name}}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+      <form class="d-flex input-group w-auto" method="GET" action="{% url 'search' %}">
+        {% csrf_token %}
+        <input type="search" class="form-control" placeholder="Tim truyen" aria-label="Search" name="search_story"/>
+        <button class="btn btn-outline-light" type="submit" data-ripple-color="dark">Search</button>
+      </form>
+
+      {% if user.is_authenticated %}
+      <div class="dropdown">
+        <a class="btn btn-primary dropdown-toggle mx-2" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+          {{user.username}}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#notifications">Thong bao</button></li>
+          <li><a class="dropdown-item" href="#">Lich su</a></li>
+          <li><a class="dropdown-item" href={% url 'logout' %}>Log out</a></li>
+          {% if user.is_staff %}
+            <li><a class="dropdown-item" href="/admin/">Edit user</a></li>
+          {% endif %}
+        </ul>
+        
+      </div>
+      {% else %}
+      <a href="/login/" class="btn btn-primary mx-2">
+        Dang nhap/Dang ky
+      </a>
+      {% endif %}
+
+  </div>
+</nav>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="notifications" tabindex="-1" aria-labelledby="notificationsLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary" style="height:50px;">
+        <p class="mb-2 mx-auto text-white" id="notificationsLabel" style="font-size:20px;">Thong bao</p>
+      </div>
+      <div class="modal-body">
+        <ul>
+        {% for notification in notifications %} 
+        <li>
+          {% if not notification.read %} 
+            <div class="notification"> 
+              <form method="POST" action="">
+                <input type="hidden" name="hidden" value="{{notification.story.id}}"/>
+                <button type="submit">
+                  <a href="{{ notification.story.get_absolute_url }}"> 
+                    Truyện "{{ notification.story.name }}" đã được cập nhật. 
+                  </a> 
+                </button>
+              </form>
+            </div> 
+            {% endif %} 
+          </li>
+        {% endfor %}
+          </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
