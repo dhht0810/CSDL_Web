@@ -71,7 +71,7 @@ def chapter(request, story_id, chapter_id):
             addReply.save()
         return redirect("/story/" + str(story_id) + "/chapter/" + str(chapter_id))
             
-    myComment = comment.objects.all()
+    myComment = comment.objects.filter(chapters=chapter_id)
         
     file = chapter[0].file.open('r')
     return render(request, 'app/chapter.html', {'chapter': chapter, 'chaptertruoc': chaptertruoc, 'chaptersau': chaptersau, 

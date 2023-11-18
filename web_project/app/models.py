@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
+from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
@@ -34,6 +35,8 @@ class story(models.Model):
     
     def __str__(self):
         return f"{self.name}"
+    def get_absolute_url(self):
+        return reverse('story', args=[int(self.id)])
     
 @receiver(pre_delete, sender=story)
 def remove_file(**kwargs):
