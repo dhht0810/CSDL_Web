@@ -46,11 +46,16 @@ def list_chapter(request, id):
     myAuthors = author.objects.raw("select app_author.* from app_author join app_story_authors "
                                + "on app_author.id = author_id join app_story "
                                + "on app_story.id = story_id where app_story.id = %s",[id])
+    myAuthors = author.objects.raw("select app_author.* from app_author join app_story_authors "
+                               + "on app_author.id = author_id join app_story "
+                               + "on app_story.id = story_id where app_story.id = %s",[id])
     user_story = get_object_or_404(story, id=id)
     if request.method == "POST":
         if 'unfollow' in request.POST:
             UserStory.objects.filter(user=request.user, story=user_story,follow=True).delete()
+            UserStory.objects.filter(user=request.user, story=user_story,follow=True).delete()
         elif 'follow' in request.POST:
+            UserStory.objects.create(user=request.user, story=user_story,follow=True).save()
             UserStory.objects.create(user=request.user, story=user_story,follow=True).save()
         return redirect("/story/" + str(id))
     
@@ -60,10 +65,30 @@ def list_chapter(request, id):
         return render(request, 'app/story.html', {"authors": myAuthors, 'chapters': myChapter, 'story': myStory, 'category': myCategory, 'is_following': is_following, "continue":cont})
     
     return render(request, 'app/story.html', {"authors": myAuthors, 'chapters': myChapter, 'story': myStory, 'category': myCategory, 'is_following': is_following})
+    if request.user.is_authenticated:
+        cont = UserStory.objects.filter(user=request.user, story=user_story,read=True)
+        return render(request, 'app/story.html', {"authors": myAuthors, 'chapters': myChapter, 'story': myStory, 'category': myCategory, 'is_following': is_following, "continue":cont})
+    
+    return render(request, 'app/story.html', {"authors": myAuthors, 'chapters': myChapter, 'story': myStory, 'category': myCategory, 'is_following': is_following})
 def chapter(request, story_id, chapter_id):
     myStory = story.objects.filter(id=story_id)
     myChapter = chapters.objects.raw("select * from app_chapters where story_id = %s order by name",[story_id])
+    myStory = story.objects.filter(id=story_id)
+    myChapter = chapters.objects.raw("select * from app_chapters where story_id = %s order by name",[story_id])
     chapter = chapters.objects.raw("select * from app_chapters where story_id = %s and id = %s",[story_id, chapter_id])
+    chaptertruoc= chapters.objects.raw("select * from app_chapters where story_id = %s and name < %s order by name desc limit 1",[story_id, chapter[0].name])
+    chaptersau = chapters.objects.raw("select * from app_chapters where story_id = %s and name > %s order by name asc limit 1",[story_id, chapter[0].name])
+    if request.user.is_authenticated:
+        if UserStory.objects.filter(user=request.user,story=get_object_or_404(story, id=story_id),chapter=get_object_or_404(chapters, id=chapter_id),follow=True).exists():
+            UserStory.objects.filter(user=request.user,story=get_object_or_404(story, id=story_id),read=True).delete()
+            UserStory.objects.filter(user=request.user,story=get_object_or_404(story, id=story_id),chapter=get_object_or_404(chapters, id=chapter_id)).update(read=True,
+                                 date=timezone.now())
+        else:
+            user_story = UserStory.objects.filter(user=request.user,story=get_object_or_404(story, id=story_id),read=True)
+            if user_story.exists():
+                user_story.update(chapter=get_object_or_404(chapters, id=chapter_id),date=timezone.now())
+            else:
+                UserStory.objects.create(user=request.user,story=get_object_or_404(story, id=story_id),read=True,chapter=get_object_or_404(chapters, id=chapter_id),date=timezone.now())
     chaptertruoc= chapters.objects.raw("select * from app_chapters where story_id = %s and name < %s order by name desc limit 1",[story_id, chapter[0].name])
     chaptersau = chapters.objects.raw("select * from app_chapters where story_id = %s and name > %s order by name asc limit 1",[story_id, chapter[0].name])
     if request.user.is_authenticated:
@@ -91,6 +116,7 @@ def chapter(request, story_id, chapter_id):
             addReply = comment.objects.create(content=reply_content,user=request.user,chapters_id=chapter_id,parent= parent_comment)
             addReply.save()
         return redirect("/story/" + str(story_id) + "/chapter/" + str(chapter_id))
+             
              
     myComment = comment.objects.filter(chapters=chapter_id)
         
