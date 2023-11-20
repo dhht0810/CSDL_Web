@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
-
+import PyPDF2
+import fitz
 # Create your views here.
 def home(request):
     mydata = story.objects.raw("select * from app_story")
@@ -13,8 +14,9 @@ def list_category(request):
         user_stories = UserStory.objects.filter(user=request.user).order_by('-date')
         if request.method == "POST":
             story_id = request.POST.get("hidden")
-            notification = get_object_or_404(UserStory, id=int(story_id))
-            if request.user == notification.user:
+            if story_id is not None:
+             notification = get_object_or_404(UserStory, id=int(story_id))
+             if request.user == notification.user:
                 notification.read = True
                 notification.save()
             return redirect("/story/" + str(story_id))
@@ -75,8 +77,37 @@ def chapter(request, story_id, chapter_id):
             
     myComment = comment.objects.filter(chapters=chapter_id)
         
-    file = chapter[0].file.open('r')
+    # Assuming 'file_path' is the path to your PDF file
+    file_path = chapter[0].file.path
+
+    # Check if the file is a PDF
+    if file_path.endswith('.pdf'):
+    # Open the PDF file in binary mode
+     with open(file_path, 'rb') as pdf_file:
+        # Create a PDF reader object
+        pdf_reader = PyPDF2.PdfReader(pdf_file)
+
+        # Get the number of pages in the PDF
+        num_pages = len(pdf_reader.pages)
+
+        # Initialize an empty string to store the content
+        pdf_content = ""
+
+        # Iterate through all pages and extract text
+        for page_num in range(num_pages):
+            page = pdf_reader.pages[page_num]
+            pdf_content += page.extract_text()
+
+    # Now 'pdf_content' contains the text content of the PDF
+     return render(request, 'app/chapter.html', {'chapter': chapter, 'chaptertruoc': chaptertruoc, 'chaptersau': chaptersau, 
+                                                'story': myStory, 'list_chapter': myChapter, 'data': pdf_content, 'list_comment': myComment,
+                                                })
+    else:
+    # If the file is not a PDF, proceed with your existing code for other file types
+     with open(file_path, 'r', encoding='utf-8') as file:
+        file_content = file.read()
+
     return render(request, 'app/chapter.html', {'chapter': chapter, 'chaptertruoc': chaptertruoc, 'chaptersau': chaptersau, 
-                                            'story': myStory, 'list_chapter': myChapter, 'data': file.read(), 'list_comment': myComment,
-                                            })
+                                                'story': myStory, 'list_chapter': myChapter, 'data': file_content, 'list_comment': myComment,
+                                                })
     

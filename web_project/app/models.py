@@ -38,10 +38,10 @@ class story(models.Model):
     def get_absolute_url(self):
         return reverse('story', args=[int(self.id)])
     
-@receiver(pre_delete, sender=story)
-def remove_file(**kwargs):
-    instance = kwargs.get('instance')
-    instance.file.delete(save=False)
+#@receiver(pre_delete, sender=story)
+#def remove_file(**kwargs):
+ #   instance = kwargs.get('instance')
+   # instance.file.delete(save=False)
 
    
 class chapters(models.Model):
