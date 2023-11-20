@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils import timezone
 from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
@@ -35,13 +36,11 @@ class story(models.Model):
     
     def __str__(self):
         return f"{self.name}"
-    def get_absolute_url(self):
-        return reverse('story', args=[int(self.id)])
     
 @receiver(pre_delete, sender=story)
 def remove_file(**kwargs):
     instance = kwargs.get('instance')
-    instance.file.delete(save=False)
+    instance.image.delete(save=False)
 
    
 class chapters(models.Model):
@@ -52,6 +51,8 @@ class chapters(models.Model):
     
     def __str__(self):
         return f"{self.name} {self.file} {self.date}"
+    def get_absolute_url(self):
+        return reverse('chapter', args=[str(self.story.id),int(self.id)])
     
 @receiver(pre_delete, sender=chapters)
 def remove_file(**kwargs):
@@ -62,16 +63,17 @@ def remove_file(**kwargs):
 class UserStory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     story = models.ForeignKey(story, on_delete=models.CASCADE)
+    chapter = models.ForeignKey(chapters,on_delete=models.CASCADE,blank=True,null=True)
     read = models.BooleanField(default=False)
-    date = models.DateTimeField(auto_now_add=True)
+    follow = models.BooleanField(default=False)
+    date = models.DateTimeField(null=True, blank=True)
 
 @receiver(post_save, sender=chapters)
 def send_update_notification(sender, instance, created, **kwargs):
     if created:
-        user_stories = UserStory.objects.filter(story=instance.story)
-        for user_story in user_stories:
-            user_story.read = False
-            user_story.save()
+        user_stories = UserStory.objects.filter(story=instance.story,follow=True)
+        if user_stories.exists():
+            UserStory.objects.create(user=user_stories[0].user,story=instance.story,chapter=instance,date=timezone.now(),follow=True).save()
     
 class comment(MPTTModel):
     content = models.CharField(default='', max_length=255,null=True,blank=True)
@@ -84,3 +86,5 @@ class comment(MPTTModel):
         return f"{self.content} {self.date}"
     class MPTTMeta:
         order_insertion_by = ['content']
+
+
