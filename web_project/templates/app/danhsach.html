@@ -1,16 +1,11 @@
 {% extends "app/master.html" %}
 
 {% block title %}
-    {{author.0.name}}
+    {{story.0.status}}
 {% endblock %}
 
 {% block content %}
     {% load static %}
-    <div class="card border-primary mb-3">
-        <div class="card-body">
-            <h2>{{author.0.name}}</h2>
-        </div>
-    </div>
         <div class="card border-primary mb-3 overflow-hidden">
             <div class="card-body container">
         <div class="row row-cols-lg-5 g-2 g-lg-3">

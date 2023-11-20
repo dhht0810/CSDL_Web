@@ -16,9 +16,8 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Danh sach</a>
           <ul class="dropdown-menu">
-            {% for x in category %}
-            <li><a class="dropdown-item" href="#">{{x.name}}</a></li>
-            {% endfor %}
+            <li><a class="dropdown-item" href="/danhsach/HT">Hoan thanh</a></li>
+            <li><a class="dropdown-item" href="/danhsach/DCN">Dang cap nhat</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -43,7 +42,7 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
           <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#notifications">Thong bao</button></li>
-          <li><a class="dropdown-item" href="#">Lich su</a></li>
+          <li><a class="dropdown-item" href="/history">Lich su</a></li>
           <li><a class="dropdown-item" href={% url 'logout' %}>Log out</a></li>
           {% if user.is_staff %}
             <li><a class="dropdown-item" href="/admin/">Edit user</a></li>
@@ -72,20 +71,15 @@
       <div class="modal-body">
         <ul>
         {% for notification in notifications %} 
+        {% if not notification.read and notification.chapter is not null and notification.follow %} 
         <li>
-          {% if not notification.read %} 
-            <div class="notification"> 
-              <form method="POST" action="">
-                <input type="hidden" name="hidden" value="{{notification.id}}"/>
-                <button type="submit">
-                  <a href="{{ notification.story.get_absolute_url }}"> 
-                    Truyện "{{ notification.story.name }}" đã được cập nhật. 
-                  </a> 
-                </button>
-              </form>
+            <div class="notification">
+              <a href="{{ notification.chapter.get_absolute_url }}" style="text-decoration:none;"> 
+                Truyện "{{ notification.story.name }}" đã được cập nhật. 
+              </a>
             </div> 
-            {% endif %} 
           </li>
+          {% endif %} 
         {% endfor %}
           </ul>
       </div>

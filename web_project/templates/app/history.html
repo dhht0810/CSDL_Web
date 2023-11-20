@@ -1,0 +1,27 @@
+{% extends "app/master.html" %}
+
+{% block title %}
+    Lich su
+{% endblock %}
+
+{% block content %}
+    {% load static %}
+    Lich su doc truyen
+    <hr />
+        <div class="card border-primary mb-3 overflow-hidden">
+            <div class="card-body container">
+        <div class="row row-cols-lg-5 g-2 g-lg-3">
+            {% for x in read %}
+            <div class="col">
+                <a href="/story/{{x.story.id}}" style="color:black; text-decoration:none;">
+                    <img src="{% get_media_prefix %}{{x.story.image}}" class="card-img" width='190px' height='247px'>
+                    <h5 class="container">{{x.story.name}}</h5>
+                </a>
+            </div>
+            {% endfor %}
+          
+        </div>
+    </div>
+</div>
+   
+{% endblock  %}

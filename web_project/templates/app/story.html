@@ -18,9 +18,13 @@
                 <div class="col-6 card border-0">
                     <h5>{{story.0.name}}</h5>
                     <p>Ten khac: {{story.0.alias}}</p>
-                    <p>Tac gia: {{story.0.authors}}</p>
+                    <p>Tac gia: 
+                        {% for x in authors %} 
+                        <a href="/author/{{x.id}}"style="color:black; text-decoration:none;">{{x.name}} </a> 
+                        {% endfor%}
+                    </p>
                     <p>The loai: <span>
-                        {% for x in category %} {{x.name}} {% endfor%}
+                        {% for x in category %} <a href="/category/{{x.id}}"style="color:black; text-decoration:none;">{{x.name}} </a> {% endfor%}
                     </p>
                     <a href="/story/{{story.0.id}}/chapter/{{chapters.0.id}}" class="btn btn-primary mx-auto d-md-flex">Doc tu dau</a>
                     {% if user.is_authenticated %}
@@ -38,6 +42,12 @@
                             </form>
                         {% endif %}
                     {% endif %}
+                    {% if continue %}
+                        <a href="/story/{{story.0.id}}/chapter/{{continue.0.chapter.id}}" class="btn btn-primary mx-auto d-md-flex">Doc tiep</a>
+                    {% endif %}
+                    {% with chapters|last as last %}
+                        <a href="/story/{{story.0.id}}/chapter/{{last.id}}" class="btn btn-primary mx-auto d-md-flex">Doc moi nhat</a>
+                    {% endwith %}
                 </div>
             </div>
             <br />
