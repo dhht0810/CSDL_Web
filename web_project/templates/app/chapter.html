@@ -14,13 +14,11 @@
              / <a href="/story/{{story.0.id}}/chapter/{{chapter.0.id}}" style="color:black; text-decoration:none;">{{chapter.0.name}}</a></p>
         <h5>{{story.0.name}} / {{chapter.0.name}}</h5>
         <div class="container row justify-content-md-center">
-            <button type="button" class="btn btn-primary" style="width:110px;">
-                {% if chaptertruoc.0.id == null %}
-                    Chap truoc
-                {% else %}
-                    <a href="/story/{{story.0.id}}/chapter/{{chaptertruoc.0.id}}" class="btn-primary" style="text-decoration:none;">Chap truoc</a>
-                {% endif %}
-            </button>
+            {% if chaptertruoc.0.id == null %}
+                <a href="#" class="btn btn-secondary" style="text-decoration:none;width:110px;">Chap truoc</a>
+            {% else %}
+                <a href="/story/{{story.0.id}}/chapter/{{chaptertruoc.0.id}}" class="btn btn-primary" style="text-decoration:none;width:110px;">Chap truoc</a>
+            {% endif %}
             <select class="form-select mx-2 border-primary" aria-label="Default select example" style="width:110px;" onchange="location = this.value;">
                 {% for x in list_chapter %}
                     {% if x.id == chapter.0.id %}
@@ -30,25 +28,21 @@
                     {% endif %}
                 {% endfor %}
             </select>
-            <button type="button" class="btn btn-primary" style="width:110px;">
-                {% if chaptersau.0.id == null %}
-                    Chap sau
-                {% else %}
-                    <a href="/story/{{story.0.id}}/chapter/{{chaptersau.0.id}}" class="btn-primary" style="text-decoration:none;">Chap sau</a>
-                {% endif %}
-            </button>
+            {% if chaptersau.0.id == null %}
+                <a href="#" class="btn btn-secondary" style="text-decoration:none;width:110px;">Chap sau</a>
+            {% else %}
+                <a href="/story/{{story.0.id}}/chapter/{{chaptersau.0.id}}" class="btn btn-primary" style="text-decoration:none;width:110px;">Chap sau</a>
+            {% endif %}
         </div>
         <hr />
         {{data|linebreaks}}
         <hr />
         <div class="container row justify-content-md-center">
-            <button type="button" class="btn btn-primary" style="width:110px;">
-                {% if chaptertruoc.0.id == null %}
-                    Chap truoc
-                {% else %}
-                    <a href="/story/{{story.0.id}}/chapter/{{chaptertruoc.0.id}}" class="btn-primary" style="text-decoration:none;">Chap truoc</a>
-                {% endif %}
-            </button>
+            {% if chaptertruoc.0.id == null %}
+                <a href="#" class="btn btn-secondary" style="text-decoration:none;width:110px;">Chap truoc</a>
+            {% else %}
+                <a href="/story/{{story.0.id}}/chapter/{{chaptertruoc.0.id}}" class="btn btn-primary" style="text-decoration:none;width:110px;">Chap truoc</a>
+            {% endif %}
             <select class="form-select mx-2 border-primary" aria-label="Default select example" style="width:110px;" onchange="location = this.value;">
                 {% for x in list_chapter %}
                     {% if x.id == chapter.0.id %}
@@ -58,13 +52,11 @@
                     {% endif %}
                 {% endfor %}
             </select>
-            <button type="button" class="btn btn-primary" style="width:110px;">
-                {% if chaptersau.0.id == null %}
-                    Chap sau
-                {% else %}
-                    <a href="/story/{{story.0.id}}/chapter/{{chaptersau.0.id}}" class="btn-primary" style="text-decoration:none;">Chap sau</a>
-                {% endif %}
-            </button>
+            {% if chaptersau.0.id == null %}
+                <a href="#" class="btn btn-secondary" style="text-decoration:none;width:110px;">Chap sau</a>
+            {% else %}
+                <a href="/story/{{story.0.id}}/chapter/{{chaptersau.0.id}}" class="btn btn-primary" style="text-decoration:none;width:110px;">Chap sau</a>
+            {% endif %}
         </div>
         <br />
         <br />

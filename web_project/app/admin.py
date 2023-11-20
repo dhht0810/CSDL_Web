@@ -5,6 +5,8 @@ from .models import *
     
 class ChaptersInline(admin.TabularInline):
     model = chapters
+    min_num = 1
+    validate_min = True
     
 class StoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'date', 'list_of_authors',)
