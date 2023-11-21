@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-3 card border-0">
                     <div class="card-bordy">
-                        <img src="{% get_media_prefix %}{{story.0.image}}" width="192" height="250" class="card-img">
+                        <div style="background-image: url('{% get_media_prefix %}{{story.0.image}}');background-position: center; background-size: contain; background-repeat: no-repeat; width:190px; height:260px;"></div>
                     </div>
                 </div>
                 <div class="col-6 card border-0">
@@ -26,7 +26,21 @@
                     <p>The loai: <span>
                         {% for x in category %} <a href="/category/{{x.id}}"style="color:black; text-decoration:none;">{{x.name}} </a> {% endfor%}
                     </p>
-                    <a href="/story/{{story.0.id}}/chapter/{{chapters.0.id}}" class="btn btn-primary mx-auto d-md-flex">Doc tu dau</a>
+                    <div class="row row-cols-3 g-2">
+                        <div class="col">
+                    <a href="/story/{{story.0.id}}/chapter/{{chapters.0.id}}" class="btn btn-primary">Doc tu dau</a>
+                        </div>
+                        <div class="col">
+                        {% with chapters|last as last %}
+                            <a href="/story/{{story.0.id}}/chapter/{{last.id}}" class="btn btn-primary">Doc moi nhat</a>
+                        {% endwith %}
+                        </div>
+                        <div class="col">
+                            {% if continue %}
+                                <a href="/story/{{story.0.id}}/chapter/{{continue.0.chapter.id}}" class="btn btn-primary">Doc tiep</a>
+                            {% endif %}
+                            </div>
+                    <div class="col">
                     {% if user.is_authenticated %}
                         {% if is_following %}
                             <form class="d-flex input-group w-auto" method="POST" action="">
@@ -42,12 +56,9 @@
                             </form>
                         {% endif %}
                     {% endif %}
-                    {% if continue %}
-                        <a href="/story/{{story.0.id}}/chapter/{{continue.0.chapter.id}}" class="btn btn-primary mx-auto d-md-flex">Doc tiep</a>
-                    {% endif %}
-                    {% with chapters|last as last %}
-                        <a href="/story/{{story.0.id}}/chapter/{{last.id}}" class="btn btn-primary mx-auto d-md-flex">Doc moi nhat</a>
-                    {% endwith %}
+                        </div>
+                    
+                        </div>
                 </div>
             </div>
             <br />
