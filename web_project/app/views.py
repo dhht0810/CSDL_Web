@@ -2,7 +2,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
 import PyPDF2
 import fitz
+
 # Create your views here.
+
 def home(request):
     mydata = story.objects.raw("select * from app_story")
     return render(request, 'app/home.html', {'story':mydata})
@@ -11,15 +13,7 @@ def list_category(request):
     mydata = category.objects.raw("select * from app_category")
     myStatus = ["HT","DCN",]
     if request.user.is_authenticated:
-        user_stories = UserStory.objects.filter(user=request.user).order_by('-date')
-        if request.method == "POST":
-            story_id = request.POST.get("hidden")
-            if story_id is not None:
-             notification = get_object_or_404(UserStory, id=int(story_id))
-             if request.user == notification.user:
-                notification.read = True
-                notification.save()
-            return redirect("/story/" + str(story_id))
+        user_stories = UserStory.objects.filter(user=request.user,follow=True,chapter__isnull=False,read=False).order_by('-date')
         return {"category":mydata, "status": myStatus,'notifications':user_stories,}
     return {"category":mydata, "status": myStatus,}
 
@@ -46,49 +40,27 @@ def list_chapter(request, id):
     myAuthors = author.objects.raw("select app_author.* from app_author join app_story_authors "
                                + "on app_author.id = author_id join app_story "
                                + "on app_story.id = story_id where app_story.id = %s",[id])
-    myAuthors = author.objects.raw("select app_author.* from app_author join app_story_authors "
-                               + "on app_author.id = author_id join app_story "
-                               + "on app_story.id = story_id where app_story.id = %s",[id])
     user_story = get_object_or_404(story, id=id)
     if request.method == "POST":
         if 'unfollow' in request.POST:
             UserStory.objects.filter(user=request.user, story=user_story,follow=True).delete()
-            UserStory.objects.filter(user=request.user, story=user_story,follow=True).delete()
         elif 'follow' in request.POST:
-            UserStory.objects.create(user=request.user, story=user_story,follow=True).save()
             UserStory.objects.create(user=request.user, story=user_story,follow=True).save()
         return redirect("/story/" + str(id))
     
-    is_following = UserStory.objects.filter(user=request.user, story=user_story).exists()
+    is_following = UserStory.objects.filter(user=request.user, story=user_story,follow=True).exists()
     if request.user.is_authenticated:
         cont = UserStory.objects.filter(user=request.user, story=user_story,read=True)
         return render(request, 'app/story.html', {"authors": myAuthors, 'chapters': myChapter, 'story': myStory, 'category': myCategory, 'is_following': is_following, "continue":cont})
     
     return render(request, 'app/story.html', {"authors": myAuthors, 'chapters': myChapter, 'story': myStory, 'category': myCategory, 'is_following': is_following})
-    if request.user.is_authenticated:
-        cont = UserStory.objects.filter(user=request.user, story=user_story,read=True)
-        return render(request, 'app/story.html', {"authors": myAuthors, 'chapters': myChapter, 'story': myStory, 'category': myCategory, 'is_following': is_following, "continue":cont})
     
-    return render(request, 'app/story.html', {"authors": myAuthors, 'chapters': myChapter, 'story': myStory, 'category': myCategory, 'is_following': is_following})
 def chapter(request, story_id, chapter_id):
     myStory = story.objects.filter(id=story_id)
     myChapter = chapters.objects.raw("select * from app_chapters where story_id = %s order by name",[story_id])
     myStory = story.objects.filter(id=story_id)
     myChapter = chapters.objects.raw("select * from app_chapters where story_id = %s order by name",[story_id])
     chapter = chapters.objects.raw("select * from app_chapters where story_id = %s and id = %s",[story_id, chapter_id])
-    chaptertruoc= chapters.objects.raw("select * from app_chapters where story_id = %s and name < %s order by name desc limit 1",[story_id, chapter[0].name])
-    chaptersau = chapters.objects.raw("select * from app_chapters where story_id = %s and name > %s order by name asc limit 1",[story_id, chapter[0].name])
-    if request.user.is_authenticated:
-        if UserStory.objects.filter(user=request.user,story=get_object_or_404(story, id=story_id),chapter=get_object_or_404(chapters, id=chapter_id),follow=True).exists():
-            UserStory.objects.filter(user=request.user,story=get_object_or_404(story, id=story_id),read=True).delete()
-            UserStory.objects.filter(user=request.user,story=get_object_or_404(story, id=story_id),chapter=get_object_or_404(chapters, id=chapter_id)).update(read=True,
-                                 date=timezone.now())
-        else:
-            user_story = UserStory.objects.filter(user=request.user,story=get_object_or_404(story, id=story_id),read=True)
-            if user_story.exists():
-                user_story.update(chapter=get_object_or_404(chapters, id=chapter_id),date=timezone.now())
-            else:
-                UserStory.objects.create(user=request.user,story=get_object_or_404(story, id=story_id),read=True,chapter=get_object_or_404(chapters, id=chapter_id),date=timezone.now())
     chaptertruoc= chapters.objects.raw("select * from app_chapters where story_id = %s and name < %s order by name desc limit 1",[story_id, chapter[0].name])
     chaptersau = chapters.objects.raw("select * from app_chapters where story_id = %s and name > %s order by name asc limit 1",[story_id, chapter[0].name])
     if request.user.is_authenticated:
@@ -164,6 +136,16 @@ def list_story_author(request, id):
 def history(request):
     if request.user.is_authenticated:
         read = UserStory.objects.filter(user=request.user,read=True)
+        if request.method == "POST":
+            story_delete = get_object_or_404(story, id=int(request.POST.get('delete')))
+            delete = UserStory.objects.filter(user=request.user, read=True, story=story_delete)
+            for user_story in delete:
+                if user_story.follow == True:
+                    UserStory.objects.create(user=request.user, follow=True, story=story_delete).save()
+                    user_story.delete()
+                else:
+                    user_story.delete()
+            return redirect("/history/")
         return render(request, 'app/history.html', {'read':read})
     
 def danhsach(request,name):
