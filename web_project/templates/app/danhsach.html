@@ -6,13 +6,19 @@
 
 {% block content %}
     {% load static %}
+            {% if story.0.status == "HT" %}
+            <h2>Truyen da hoan thanh</h2>
+            {% else %}
+            <h2>Truyen dang cap nhat</h2>
+            {% endif %}
+            <hr />
         <div class="card border-primary mb-3 overflow-hidden">
             <div class="card-body container">
         <div class="row row-cols-lg-5 g-2 g-lg-3">
             {% for x in story %}
             <div class="col">
                 <a href="/story/{{x.id}}" style="color:black; text-decoration:none;">
-                    <img src="{% get_media_prefix %}{{x.image}}" class="card-img" width='190px' height='247px'>
+                    <div style="background-image: url('{% get_media_prefix %}{{x.image}}');background-position: center; background-size: contain; background-repeat: no-repeat; width:190px; height:260px;"></div>
                     <h5 class="container">{{x.name}}</h5>
                 </a>
             </div>
