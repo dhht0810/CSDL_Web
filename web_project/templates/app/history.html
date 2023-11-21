@@ -14,9 +14,16 @@
             {% for x in read %}
             <div class="col">
                 <a href="/story/{{x.story.id}}" style="color:black; text-decoration:none;">
-                    <img src="{% get_media_prefix %}{{x.story.image}}" class="card-img" width='190px' height='247px'>
+                    <div style="background-image: url('{% get_media_prefix %}{{x.story.image}}');background-position: center; background-size: contain; background-repeat: no-repeat; width:190px; height:260px;">
+                        <form class="d-flex input-group w-auto" method="POST" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="delete" value="{{x.story.id}}"/>
+                            <button class="btn btn-danger mx-2 mt-2" type="submit" data-ripple-color="dark">Xoa</button>
+                        </form>
+                    </div>
                     <h5 class="container">{{x.story.name}}</h5>
                 </a>
+                
             </div>
             {% endfor %}
           
