@@ -52,6 +52,7 @@
             <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
               <span class="visually-hidden">{{ notifications|length }}</span>
             </span>
+            {% endif %}
           </button></li>
           <li><a class="dropdown-item" href="/history">Lich su</a></li>
           <li><a class="dropdown-item" href={% url 'logout' %}>Log out</a></li>
