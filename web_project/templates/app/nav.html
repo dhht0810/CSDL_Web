@@ -39,9 +39,21 @@
       <div class="dropdown">
         <a class="btn btn-primary dropdown-toggle mx-2" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
           {{user.username}}
+          {% if notifications|length != 0 %}
+          <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+            <span class="visually-hidden">{{ notifications|length }}</span>
+          </span>
+          {% endif %}
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#notifications">Thong bao</button></li>
+          <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#notifications">
+            Thong bao
+            {% if notifications|length != 0 %}
+            <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+              <span class="visually-hidden">{{ notifications|length }}</span>
+            </span>
+            {% endif %}
+          </button></li>
           <li><a class="dropdown-item" href="/history">Lich su</a></li>
           <li><a class="dropdown-item" href={% url 'logout' %}>Log out</a></li>
           {% if user.is_staff %}
@@ -71,15 +83,13 @@
       <div class="modal-body">
         <ul>
         {% for notification in notifications %} 
-        {% if not notification.read and notification.chapter is not null and notification.follow %} 
         <li>
             <div class="notification">
               <a href="{{ notification.chapter.get_absolute_url }}" style="text-decoration:none;"> 
-                Truyện "{{ notification.story.name }}" đã được cập nhật. 
+                Truyện "{{ notification.story.name }}" đã cập nhật {{ notification.chapter.name }}. 
               </a>
             </div> 
           </li>
-          {% endif %} 
         {% endfor %}
           </ul>
       </div>
