@@ -14,7 +14,7 @@
             {% for x in story %}
             <div class="col">
                 <a href="/story/{{x.id}}" style="color:black; text-decoration:none;">
-                    <div style="background-image: url('{% get_media_prefix %}{{x.story.image}}');background-position: center; background-size: contain; background-repeat: no-repeat; width:190px; height:260px;"></div>
+                    <div style="background-image: url('{% get_media_prefix %}{{x.image}}');background-position: center; background-size: contain; background-repeat: no-repeat; width:190px; height:260px;"></div>
                     <h5 class="container">{{x.name}}</h5>
                 </a>
             </div>

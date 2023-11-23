@@ -54,13 +54,12 @@
             </span>
             {% endif %}
           </button></li>
-          <li><a class="dropdown-item" href="/history">Lich su</a></li>
+          <li><a class="dropdown-item" href="/history/">Lich su</a></li>
           <li><a class="dropdown-item" href={% url 'logout' %}>Log out</a></li>
           {% if user.is_staff %}
             <li><a class="dropdown-item" href="/admin/">Edit user</a></li>
           {% endif %}
         </ul>
-        
       </div>
       {% else %}
       <a href="/login/" class="btn btn-primary mx-2">

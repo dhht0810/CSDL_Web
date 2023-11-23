@@ -12,7 +12,8 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-    return render(request, "users/register.html", {'form': form, })    
+            return redirect("/")
+    return render(request, "users/register.html", {'form': form, })   
 
 def login(request):
     if request.user.is_authenticated:
